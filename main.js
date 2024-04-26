@@ -1,7 +1,14 @@
 import './style.css';
 import {Map, View} from 'ol';
-import TileLayer from 'ol/layer/Tile';
+// Interactions
+import {Draw, Select} from 'ol/interaction';
+// layers
+import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
+// sources
 import OSM from 'ol/source/OSM';
+import VectorSource from 'ol/source/Vector';
+
+
 
 // default latitude to Santiago
 const defaultLongitude = -7865172.184112017;
@@ -15,6 +22,9 @@ const latitude = params.latitude ? Number(params.latitude) : defaultLatitude;
 const longitude = params.longitude ? Number(params.longitude) : defaultLongitude;
 const zoom = params.zoom ? Number(params.zoom) : defaultZoom;
 
+let draw;
+let select = new Select();
+
 const map = new Map({
   target: 'map',
   layers: [
@@ -27,3 +37,34 @@ const map = new Map({
     zoom: zoom
   })
 });
+
+const source =  new VectorSource ({wrapX: false});
+const vector = new VectorLayer({
+  source: source
+});
+
+map.addLayer(vector);
+
+function enableDraw(type) {
+  console.log("Enabling draw on " + type);
+  // change classes of buttons active/inactive
+
+  // we need to remove any select or any other draw interaction
+  map.removeInteraction(select);
+
+  if (draw) {
+    map.removeInteraction(draw);
+  }
+
+  draw = new Draw({
+    source: source,
+    type: type
+  })
+
+  map.addInteraction(draw);
+}
+
+document.getElementById('add-point').addEventListener('click', function() {enableDraw.call(this, 'Point');})
+document.getElementById('add-line').addEventListener('click', function() {enableDraw.call(this, 'LineString');})
+document.getElementById('add-polygon').addEventListener('click', function() {enableDraw.call(this, 'Polygon');})
+
