@@ -64,7 +64,14 @@ function enableDraw(type) {
   map.addInteraction(draw);
 }
 
+function enableSelect() {
+  console.log("Enabling select");
+  map.removeInteraction(draw);
+  map.addInteraction(select);
+}
+
 document.getElementById('add-point').addEventListener('click', function() {enableDraw.call(this, 'Point');})
 document.getElementById('add-line').addEventListener('click', function() {enableDraw.call(this, 'LineString');})
 document.getElementById('add-polygon').addEventListener('click', function() {enableDraw.call(this, 'Polygon');})
+document.getElementById('select-feature').addEventListener('click', function() {enableSelect();})
 
