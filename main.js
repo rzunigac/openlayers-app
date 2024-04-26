@@ -70,8 +70,29 @@ function enableSelect() {
   map.addInteraction(select);
 }
 
+function deleteSelected() {
+  console.log("Deleting selected");
+  let features = select.getFeatures();
+  if (features.getLength() ==0) {
+    console.log("No features selected");
+    return;
+  }
+  // Iterate over all selected features, 
+  // but currently only one can be selected.
+  features.forEach(function(feature) {
+    source.removeFeature(feature);
+  });
+  select.getFeatures().clear();
+}
+
+function deleteAll() {
+  console.log("Deleting all");
+  source.clear();
+}
+
 document.getElementById('add-point').addEventListener('click', function() {enableDraw.call(this, 'Point');})
 document.getElementById('add-line').addEventListener('click', function() {enableDraw.call(this, 'LineString');})
 document.getElementById('add-polygon').addEventListener('click', function() {enableDraw.call(this, 'Polygon');})
 document.getElementById('select-feature').addEventListener('click', function() {enableSelect();})
-
+document.getElementById('delete-feature').addEventListener('click', function() {deleteSelected();})
+document.getElementById('delete-all-features').addEventListener('click', function() {deleteAll();})
