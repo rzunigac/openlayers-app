@@ -96,3 +96,14 @@ document.getElementById('add-polygon').addEventListener('click', function() {ena
 document.getElementById('select-feature').addEventListener('click', function() {enableSelect();})
 document.getElementById('delete-feature').addEventListener('click', function() {deleteSelected();})
 document.getElementById('delete-all-features').addEventListener('click', function() {deleteAll();})
+
+source.on('change', function() {
+  let features = source.getFeatures();
+  let typeCounts = {};
+  features.forEach(function(feature) {
+    let type = feature.getGeometry().getType();
+    typeCounts[type] = (typeCounts[type] || 0) + 1;
+  });
+  console.log(typeCounts);
+});
+
